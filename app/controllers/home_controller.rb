@@ -7,7 +7,7 @@ class HomeController < ApplicationController
   
   def write
     @items=Item.all
-    object = LinkThumbnailer.generate('http://wantknow.tistory.com/')
+    #bject = LinkThumbnailer.generate('http://wantknow.tistory.com/')
   end
   
   def create

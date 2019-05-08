@@ -2,7 +2,7 @@ require 'link_thumbnailer'
 class Item < ActiveRecord::Base
     has_many :likes
     serialize :member, Array
-    before_save :urlSave
+    # before_save :urlSave
     
     def getRank
         id=self.id

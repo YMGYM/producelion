@@ -35,7 +35,7 @@
                         <tr onclick="window.open('<%= i.url %>', '_blank')">
                             <td class="center" id="td_<%=i.id%>"><%= i.getRank%></td>
                             <td><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></td>
-                            <td class="center"><img class="tableImg"src="<%= i.img%>" width="20%"></img></td>
+                            <td class="center"><img class="tableImg"src="<%= asset_path 'lion_black.png' %>" width="20%"></img></td>
                             <td><%= i.name%></td>
                             <td><%= i.teamName%></td>
                             <td style="text-align:right;padding-right:5px"><img src="<%=asset_path 'lion_like.png'%>" width="30px"></img></td>

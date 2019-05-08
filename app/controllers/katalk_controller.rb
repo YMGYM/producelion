@@ -6,7 +6,7 @@ class KatalkController < ApplicationController
     
     autobot = {
     "type" => "buttons",
-    "buttons" => ["사이트 접속하기", "투표하기","개발자 정보"]
+    "buttons" => ["투표하기","개발자 정보"]
     }
     
     render json: autobot
@@ -18,7 +18,7 @@ class KatalkController < ApplicationController
      
     if msg == "사이트 접속하기"
         answer = {message: { text: "어서오세요! Produce LION 입니다!",
-                    message_button: {label: "사이트 접속", url: "https://boiling-sea-11755.herokuapp.com/"}},
+                    message_button: {label: "사이트 접속", url: "https://earlybirdston-minjun.c9users.io/"}},
                     keyboard: { "type"=> "buttons", "buttons"=> ["돌아가기", "투표하기"]
                     }
         }
@@ -29,7 +29,7 @@ class KatalkController < ApplicationController
             # itemAry.push(item.id)
         end
         
-        answer = {message: { text: "투표하고 싶은 팀을 골라주세요!"},
+        answer = {message: { text: "투표하고 싶은 아이디어를 골라주세요!"},
                     keyboard: { "type"=> "buttons", "buttons"=> itemAry + ["돌아가기"]
                 }
         }
@@ -42,7 +42,7 @@ class KatalkController < ApplicationController
         }
     elsif msg == "개발자 정보"
         answer = {
-            message: { text: "프로듀스 라이언 개발자 정보입니다."},
+            message: { text: "투표지렁이는 프로듀스 라이언의 코드를 사용합니다. 프로듀스 라이언 개발자 정보입니다."},
             keyboard: { "type"=> "buttons", "buttons"=> ["노종원", "안민준","이우경","나상준"]
             }
         }
@@ -74,34 +74,45 @@ class KatalkController < ApplicationController
         cut = msg.split("-").first
         key = params[:user_key]
         item = Item.find_by_name(cut)
-        check = Like.find_by_user(key)
+        check = Like.where(:user => key)
         
-        # if check.present?
-        # answer = {message: { text: "이미 투표하셨습니다! 결과를 확인해 보세요!", message_button: {label: "사이트 접속", url: "https://boiling-sea-11755.herokuapp.com/"}},
-                
-        #         keyboard: { "type"=> "buttons", "buttons"=> ["돌아가기"]
-        #         }
-        # } 
-        
-        # else
-            
-        Like.find_or_create_by(:user => key ,:item_id => item.id)
-        
-        
-        answer = {message: { text: "투표 완료! 결과를 확인하세요! ", message_button: {label: "사이트 접속", url: "https://boiling-sea-11755.herokuapp.com/"}},
+        if check.count == 3
+        answer = {message: { text: "이미 모두 투표하셨습니다! 결과를 확인해 보세요!", message_button: {label: "사이트 접속", url: "https://earlybirdston-minjun.c9users.io/"}},
                 
                 keyboard: { "type"=> "buttons", "buttons"=> ["돌아가기"]
                 }
-        }    
+        } 
         
-        # end
+        else
+            count = 0
+            check.each do |c|
+                if c.item_id == item.id
+                    count += 1
+                end
+            end
+            if count == 0
+                
+                Like.create(:user => key, :item_id => item.id)
+                answer = {message: { text: "투표 완료! 결과를 확인하세요! ", message_button: {label: "사이트 접속", url: "https://earlybirdston-minjun.c9users.io/"}},
+                
+                keyboard: { "type"=> "buttons", "buttons"=> ["돌아가기"]}
+                }    
+                
+                
+            else 
+            answer = {message: { text: "이미 이 아이디어에 투표하셨습니다! 결과를 확인해 보세요!", message_button: {label: "사이트 접속", url: "https://earlybirdston-minjun.c9users.io/"}},
+                
+                keyboard: { "type"=> "buttons", "buttons"=> ["돌아가기"] }}
+            
+            
+            end
+        end
+    
+    
+    
+    
     end
-    
     render json: answer
-    
-    
+  
   end
-  
-  
-  
 end
